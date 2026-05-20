@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="TELEchat">
+  <rect width="512" height="512" rx="118" fill="#222222"/>
+  <path d="M109 244 397 120c19-8 36 11 26 29L290 396c-10 19-38 16-43-5l-34-113-102-26c-5-1-6-6-2-8Z" fill="#89E900"/>
+  <path d="m215 276 187-142-123 185-10 75-54-118Z" fill="#00C896" opacity=".9"/>
+</svg>

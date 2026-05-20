@@ -1,0 +1,41 @@
+import compression from 'compression';
+import cors from 'cors';
+import express from 'express';
+import helmet from 'helmet';
+import morgan from 'morgan';
+import rateLimit from 'express-rate-limit';
+import { env } from './config/env.js';
+import { sanitizeBody } from './middleware/sanitize.js';
+import { errorHandler, notFound } from './middleware/errorHandler.js';
+import authRoutes from './routes/auth.routes.js';
+import userRoutes from './routes/users.routes.js';
+import chatRoutes from './routes/chats.routes.js';
+import messageRoutes from './routes/messages.routes.js';
+import groupRoutes from './routes/groups.routes.js';
+import mediaRoutes from './routes/media.routes.js';
+import callRoutes from './routes/calls.routes.js';
+import notificationRoutes from './routes/notifications.routes.js';
+import adminRoutes from './routes/admin.routes.js';
+
+export const app = express();
+
+app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
+app.use(cors({ origin: env.CLIENT_URL.split(',').map((item) => item.trim()), credentials: true }));
+app.use(compression());
+app.use(express.json({ limit: '2mb' }));
+app.use(morgan(env.NODE_ENV === 'production' ? 'combined' : 'dev'));
+app.use(rateLimit({ windowMs: 60_000, max: 240, standardHeaders: true, legacyHeaders: false }));
+app.use(sanitizeBody);
+
+app.get('/health', (_req, res) => res.json({ ok: true, service: 'telechat-api' }));
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/chats', chatRoutes);
+app.use('/api/messages', messageRoutes);
+app.use('/api/groups', groupRoutes);
+app.use('/api/media', mediaRoutes);
+app.use('/api/calls', callRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/admin', adminRoutes);
+app.use(notFound);
+app.use(errorHandler);
