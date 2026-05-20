@@ -16,8 +16,8 @@ router.post('/session', body('supabaseAccessToken').isString().notEmpty(), valid
     const authUser = data.user;
     const profilePayload = {
       id: authUser.id,
-      email: authUser.email,
-      phone: authUser.phone,
+      email: authUser.email || null,
+      phone: authUser.phone || null,
       username: authUser.user_metadata?.username || authUser.email?.split('@')[0] || `user_${authUser.id.slice(0, 6)}`,
       last_seen_at: new Date().toISOString(),
       is_online: true
